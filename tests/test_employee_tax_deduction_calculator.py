@@ -72,3 +72,19 @@ def test_deduction_is_zero_above_50000() -> None:
     result = calculator.calculate(Decimal("60000"))
 
     assert result == Decimal("0")
+
+def test_additional_65_euro_deduction_between_25000_and_28000() -> None:
+    calculator = EmployeeTaxDeductionCalculator()
+
+    income = Decimal("26000")
+
+    result = calculator.calculate(income)
+
+    expected = (
+        Decimal("1910")
+        + Decimal("1190")
+        * ((Decimal("28000") - income) / Decimal("13000"))
+        + Decimal("65")
+    )
+
+    assert result == expected        
