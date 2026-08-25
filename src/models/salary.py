@@ -15,6 +15,7 @@ class SalaryResult:
     taxable_income: Decimal
     gross_irpef: Decimal
     employee_tax_deduction: Decimal
+    additional_tax_relief: Decimal
     net_irpef: Decimal
     regional_tax: Decimal
     municipal_tax: Decimal

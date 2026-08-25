@@ -1,74 +1,46 @@
 from decimal import Decimal
 
 from src.models import SalaryInput
-from src.services import (
-    EmployeeTaxDeductionCalculator,
-    IrpefCalculator,
-    MunicipalTaxCalculator,
-    RegionalTaxCalculator,
-    SocialSecurityCalculator,
-)
+from src.services import SalaryCalculator
 
 
 def main() -> None:
     salary_input = SalaryInput(
-        annual_gross_salary=Decimal("35000")
+        annual_gross_salary=Decimal("35000"),
+        salary_payments=13,
     )
 
-    social_security_calculator = SocialSecurityCalculator()
-    irpef_calculator = IrpefCalculator()
-    deduction_calculator = EmployeeTaxDeductionCalculator()
-    regional_tax_calculator = RegionalTaxCalculator()
-    municipal_tax_calculator = MunicipalTaxCalculator()
+    calculator = SalaryCalculator()
 
-    social_security = social_security_calculator.calculate(
-        salary_input.annual_gross_salary
-    )
-
-    taxable_income = (
-        salary_input.annual_gross_salary
-        - social_security
-    )
-
-    gross_irpef = irpef_calculator.calculate(
-        taxable_income
-    )
-
-    employee_tax_deduction = deduction_calculator.calculate(
-        taxable_income
-    )
-
-    net_irpef = max(
-        Decimal("0"),
-        gross_irpef - employee_tax_deduction,
-    )
-
-    regional_tax = regional_tax_calculator.calculate(
-        taxable_income
-    )
-
-    municipal_tax = municipal_tax_calculator.calculate(
-        taxable_income
-    )
-
-    annual_net_salary = (
-        salary_input.annual_gross_salary
-        - social_security
-        - net_irpef
-        - regional_tax
-        - municipal_tax
-    )
+    result = calculator.calculate(salary_input)
 
     print("Jet HR Salary Calculator")
-    print(f"RAL: €{salary_input.annual_gross_salary}")
-    print(f"Employee INPS: €{social_security}")
-    print(f"IRPEF taxable income: €{taxable_income}")
-    print(f"Gross IRPEF: €{gross_irpef}")
-    print(f"Employee tax deduction: €{employee_tax_deduction}")
-    print(f"Net IRPEF: €{net_irpef}")
-    print(f"Lombardy regional tax: €{regional_tax}")
-    print(f"Milan municipal tax: €{municipal_tax}")
-    print(f"Annual net salary: €{annual_net_salary}")
+    print("------------------------")
+    print(f"RAL: €{result.gross_salary:.2f}")
+    print(f"Employee INPS: €{result.social_security:.2f}")
+    print(f"Taxable income: €{result.taxable_income:.2f}")
+    print(f"Gross IRPEF: €{result.gross_irpef:.2f}")
+    print(
+        "Employee tax deduction: "
+        f"€{result.employee_tax_deduction:.2f}"
+    )
+    print(
+        "Additional tax relief: "
+        f"€{result.additional_tax_relief:.2f}"
+    )
+    print(f"Net IRPEF: €{result.net_irpef:.2f}")
+    print(f"Lombardy tax: €{result.regional_tax:.2f}")
+    print(f"Milan tax: €{result.municipal_tax:.2f}")
+    print("------------------------")
+    print(f"Annual net: €{result.annual_net_salary:.2f}")
+    print(
+        f"Average monthly net: "
+        f"€{result.average_monthly_net:.2f}"
+    )
+    print(
+        f"Net per salary payment (13): "
+        f"€{result.net_per_salary_payment:.2f}"
+    )
 
 
 if __name__ == "__main__":
