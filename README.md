@@ -17,7 +17,7 @@ The project was built as a prototype for the Jet HR AI Product Builder technical
 
 ## Live Demo
 
-**Streamlit app:** add-live-url-after-deployment
+**Streamlit app:** https://yasamanzahedan-salary-calculator-streamlit-app-xtefgf.streamlit.app/
 
 ## How it works
 
